@@ -1,0 +1,15 @@
+body, p, h1, h3 {
+    text-align: center;
+    padding: 0.5%;
+}
+
+img {
+    max-width: 100px;
+    height: auto;
+}
+
+button {
+    height: 75px;
+    width: 125px;
+    margin: 35px;
+}
