@@ -13,3 +13,7 @@ button {
     width: 125px;
     margin: 35px;
 }
+
+.hidden {
+    display: none;
+}

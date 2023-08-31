@@ -1,0 +1,53 @@
+.hidden {
+    display: none;
+    opacity: 0;
+}
+
+body, h1, h3 {
+    text-align: center;
+    padding: 1.5%;
+}
+
+p {
+    display: inline;
+    font-size: 3em;
+    padding: 5%;
+}
+
+.imgHolder {
+    width: 200%;
+    height: 200%;
+}
+
+div {
+    flex-direction: row;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.large {
+    font-size: 6em;
+}
+
+.score {
+    width: 120%;
+}
+
+.game {
+    justify-content:space-evenly;
+    display: flex;
+    align-items: center;
+    margin: auto;
+    padding: 10%;
+    size: 100% 100%;
+    width: 50%;
+}
+
+button {
+    height: auto;
+    width: 15%;
+    font-size: 2em;
+}
