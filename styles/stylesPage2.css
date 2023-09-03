@@ -3,6 +3,11 @@
     opacity: 0;
 }
 
+body {
+    max-width: 1440px;
+    margin: auto;
+}
+
 body, h1, h3 {
     text-align: center;
     padding: 1.5%;
