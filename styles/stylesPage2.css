@@ -6,6 +6,10 @@
 body {
     max-width: 1440px;
     margin: auto;
+    background-image: url(../img/background.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 body, h1, h3 {

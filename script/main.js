@@ -1,13 +1,8 @@
 // player 1 images
-const steinP1 = document.querySelector(".stein1")
-const saksP1 = document.querySelector(".saks1")
-const papirP1 = document.querySelector(".papir1")
-
+const p1Img = document.querySelector(".p1")
 
 // player 2 images
-const steinP2 = document.querySelector(".stein2")
-const saksP2 = document.querySelector(".saks2")
-const papirP2 = document.querySelector(".papir2")
+const p2Img = document.querySelector(".p2")
 
 // score board
 const scoreBoard = document.querySelector("#scoreboard")
@@ -17,6 +12,9 @@ const countdownelement = document.querySelector("#countdown")
 
 // start button
 const startButton = document.querySelector("#startButton")
+
+// user buttons
+const userButtton = document.querySelectorAll(".buttons")
 
 // user selection
 const steinButton = document.querySelector("#steinButton")
@@ -30,26 +28,113 @@ const homeButton = document.querySelector("#home")
 const startGameElements = document.querySelectorAll(".start")
 
 // active images for players
-let activeImgP1 = steinP1
-let activeImgP2 = steinP2
+// let activeImgP1 = steinP1
+// let activeImgP2 = steinP2
 
 
 
 let time = 2
 
+let p1Score = 0
+let p2Score = 0
 
-startButton.addEventListener('click', function() {
-  gamestarter()
-});
+let playerChoise = 0
+
+steinButton.addEventListener('click', () => playerButtonChoise(1));
+saksButton.addEventListener('click', () => playerButtonChoise(2));
+papirButton.addEventListener('click', () => playerButtonChoise(3));
+
+startButton.addEventListener('click', gamestarter);
 
 
 
 function gamestarter() {
     startGameElements.forEach((Element) => Element.classList.toggle("hidden"))
-
+    userButtton.forEach((Element) => Element.classList.toggle("hidden"))
 
 
     countdown()
+}
+
+function playerButtonChoise(choise) {
+    playerChoise = choise
+    console.log(choise)
+    userButtton.forEach((Element) => Element.classList.toggle("hidden"))
+}
+
+
+function winCheker(p1, p2) {
+
+    // 0 = stein , 1 = saks , 2 pappir 
+    console.log("HALOOO")
+
+    switch (p1) {
+        case 0:
+            // user did not chose, looses
+            p2Score++
+            newround()
+            userButtton.forEach((Element) => Element.classList.toggle("hidden"))
+            break;
+        case 1:
+            // user Rock    
+            if (p2 == 0) {
+                // tie
+                newround()
+            } else if (p2 == 1) {
+                // p2 lose
+                p1Score++
+                newround()
+            } else {
+                // p2 win
+                p2Score++
+                newround()
+            }
+
+            break;
+        case 2:
+            // user saks
+            if (p2 == 0) {
+                // p2 win STEIN
+                p2Score++
+                newround()
+            } else if (p2 == 1) {
+                // tie Saks
+                newround()
+            } else {
+                // p1 win pappir
+                p1Score++
+                newround()
+            }
+            break;
+        case 3:
+            // user papir
+            if (p2 == 0) {
+                // p1 win STEIN
+                p1Score++                
+                newround()
+            } else if (p2 == 1) {
+                // p2 win Saks
+                p2Score++
+                newround()
+            } else {
+                // tie pappir
+                newround()
+            }
+            break;
+    }
+}
+
+function newround() {
+    console.log(p1Score,p2Score)
+    scoreBoard.textContent = `${p1Score} - ${p2Score}`
+    time = 2
+    countdownelement.textContent = 3;
+
+    setTimeout(() => {
+        // unhide / hide elements
+        startGameElements.forEach((Element) => Element.classList.toggle("hidden"))
+    }, 750);
+  
 }
 
 
@@ -57,9 +142,25 @@ function countdown() {
     
     const countdownInterval = setInterval(() => {
         if (time === 0) {
-          countdownelement.textContent = 'vis';
-          clearInterval(randomImg);
-          clearInterval(countdownInterval);
+          
+            countdownelement.textContent = 'vis';
+            clearInterval(randomImg);
+            clearInterval(countdownInterval);
+            console.log(playerChoise)
+
+            
+            const p2choise = Math.floor(Math.random() * 3)
+            setTimeout(() => {    
+                randomImageTool(playerChoise-1, p1Img)
+                randomImageTool(p2choise, p2Img)
+                console.log(p2choise)
+                console.log(p2Img.src)
+                console.log(p2choise)
+
+                winCheker(playerChoise, p2choise)
+            }, 110);
+   
+
         } else {
           countdownelement.textContent = time;
           time--;
@@ -71,39 +172,25 @@ function countdown() {
         const p1RandomNum = Math.floor(Math.random() * 3);
         const p2RandomNum = Math.floor(Math.random() * 3);
 
-        console.log(p1RandomNum, p2RandomNum)
+        randomImageTool(p1RandomNum, p1Img)
+        randomImageTool(p2RandomNum, p2Img)
 
-        if (p1RandomNum == 0) {
-            activeImgP1.classList.toggle("hidden")
-            steinP1.classList.toggle("hidden")
-            activeImgP1 = steinP1
-        } else if (p1RandomNum == 1) {
-            activeImgP1.classList.toggle("hidden")
-            saksP1.classList.toggle("hidden")
-            activeImgP1 = saksP1
-        } else if(p1RandomNum == 2) {
-            activeImgP1.classList.toggle("hidden")
-            papirP1.classList.toggle("hidden")
-            activeImgP1 = papirP1
-        }
-
-        if (p2RandomNum == 0) {
-            activeImgP2.classList.toggle("hidden")
-            steinP2.classList.toggle("hidden")
-            activeImgP2 = steinP2
-        } else if (p2RandomNum == 1) {
-            activeImgP2.classList.toggle("hidden")
-            saksP2.classList.toggle("hidden")
-            activeImgP2 = saksP2
-        } else if(p2RandomNum == 2) {
-            activeImgP2.classList.toggle("hidden")
-            papirP2.classList.toggle("hidden")
-            activeImgP2 = papirP2
-        }
 
     }, 100);
 
 }
 
+
+function randomImageTool(num, user) {
+    
+    if (num == 0) {
+        user.src = "../img/Cobblestone.jpg"
+    } else if (num == 1) {
+        user.src = "../img/Saks.jpg"
+    } else if(num == 2) {
+        user.src = "../img/Papir.jpg"
+    }
+    
+}
 
 
