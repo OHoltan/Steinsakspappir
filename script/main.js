@@ -44,14 +44,17 @@ steinButton.addEventListener('click', () => playerButtonChoise(1));
 saksButton.addEventListener('click', () => playerButtonChoise(2));
 papirButton.addEventListener('click', () => playerButtonChoise(3));
 
-startButton.addEventListener('click', gamestarter);
+startButton.addEventListener('click', () => {
+    gamestarter()
+    startButton.classList.toggle("hidden")
+
+});
 
 
 
 function gamestarter() {
     startGameElements.forEach((Element) => Element.classList.toggle("hidden"))
     userButtton.forEach((Element) => Element.classList.toggle("hidden"))
-
 
     countdown()
 }
@@ -71,6 +74,7 @@ function winCheker(p1, p2) {
     switch (p1) {
         case 0:
             // user did not chose, looses
+            p1Img.src = "../img/Barrier2.jpg"
             p2Score++
             newround()
             userButtton.forEach((Element) => Element.classList.toggle("hidden"))
@@ -128,13 +132,33 @@ function newround() {
     console.log(p1Score,p2Score)
     scoreBoard.textContent = `${p1Score} - ${p2Score}`
     time = 2
-    countdownelement.textContent = 3;
+    playerChoise = 0 
+
 
     setTimeout(() => {
-        // unhide / hide elements
+
+        if (p1Score == 2) {
+            restart()
+        } else if (p2Score == 2){
+            restart()
+        } else {
+                    // unhide / hide elements
         startGameElements.forEach((Element) => Element.classList.toggle("hidden"))
+        countdownelement.textContent = 3;
+        setTimeout(() => {
+            gamestarter()
+        }, 1500);
+
+        }
+
+
     }, 750);
   
+}
+
+function restart() {
+    startButton.classList.toggle("hidden")
+    startGameElements.forEach((Element) => Element.classList.toggle("hidden"))
 }
 
 
@@ -160,6 +184,16 @@ function countdown() {
                 winCheker(playerChoise, p2choise)
             }, 110);
    
+
+        } else if (time === 1) {
+
+            if (playerChoise == 0) {
+                countdownelement.textContent = time;
+                time--;
+            } else {
+                countdownelement.textContent = time;
+                time--;
+            }
 
         } else {
           countdownelement.textContent = time;
