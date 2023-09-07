@@ -27,11 +27,8 @@ const homeButton = document.querySelector("#home")
 // elements for start/stop game
 const startGameElements = document.querySelectorAll(".start")
 
-// active images for players
-// let activeImgP1 = steinP1
-// let activeImgP2 = steinP2
-
-
+// definig player Computer Choise
+let p2choise
 
 let time = 2
 
@@ -47,6 +44,8 @@ papirButton.addEventListener('click', () => playerButtonChoise(3));
 startButton.addEventListener('click', () => {
     gamestarter()
     startButton.classList.toggle("hidden")
+    p1Score = 0
+    p2Score = 0
 
 });
 
@@ -61,7 +60,7 @@ function gamestarter() {
 
 function playerButtonChoise(choise) {
     playerChoise = choise
-    console.log(choise)
+    // console.log(choise) 
     userButtton.forEach((Element) => Element.classList.toggle("hidden"))
 }
 
@@ -69,13 +68,13 @@ function playerButtonChoise(choise) {
 function winCheker(p1, p2) {
 
     // 0 = stein , 1 = saks , 2 pappir 
-    console.log("HALOOO")
 
     switch (p1) {
         case 0:
             // user did not chose, looses
             p1Img.src = "../img/Barrier2.jpg"
             p2Score++
+            blink(p2Img)
             newround()
             userButtton.forEach((Element) => Element.classList.toggle("hidden"))
             break;
@@ -87,10 +86,12 @@ function winCheker(p1, p2) {
             } else if (p2 == 1) {
                 // p2 lose
                 p1Score++
+                blink(p1Img)
                 newround()
             } else {
                 // p2 win
                 p2Score++
+                blink(p2Img)
                 newround()
             }
 
@@ -100,6 +101,7 @@ function winCheker(p1, p2) {
             if (p2 == 0) {
                 // p2 win STEIN
                 p2Score++
+                blink(p2Img)
                 newround()
             } else if (p2 == 1) {
                 // tie Saks
@@ -107,6 +109,7 @@ function winCheker(p1, p2) {
             } else {
                 // p1 win pappir
                 p1Score++
+                blink(p1Img)
                 newround()
             }
             break;
@@ -114,11 +117,13 @@ function winCheker(p1, p2) {
             // user papir
             if (p2 == 0) {
                 // p1 win STEIN
-                p1Score++                
+                p1Score++ 
+                blink(p1Img)               
                 newround()
             } else if (p2 == 1) {
                 // p2 win Saks
                 p2Score++
+                blink(p2Img)
                 newround()
             } else {
                 // tie pappir
@@ -126,10 +131,18 @@ function winCheker(p1, p2) {
             }
             break;
     }
+    
+}
+
+function blink(player) {
+    player.classList.toggle("blink-image")
+    setTimeout(() => {
+       player.classList.toggle("blink-image") 
+    }, 1000);
 }
 
 function newround() {
-    console.log(p1Score,p2Score)
+    // console.log(p1Score,p2Score)
     scoreBoard.textContent = `${p1Score} - ${p2Score}`
     time = 2
     playerChoise = 0 
@@ -139,8 +152,10 @@ function newround() {
 
         if (p1Score == 2) {
             restart()
+            victory(p1Img)
         } else if (p2Score == 2){
             restart()
+            victory(p2Img)
         } else {
                     // unhide / hide elements
         startGameElements.forEach((Element) => Element.classList.toggle("hidden"))
@@ -161,39 +176,58 @@ function restart() {
     startGameElements.forEach((Element) => Element.classList.toggle("hidden"))
 }
 
+function victory(winner) {
+    const audio = new Audio('../audio/winaudio.mp3');
+    audio.play();
+
+    winner.classList.toggle("blink-background")
+    setTimeout(() => {
+       winner.classList.toggle("blink-background") 
+    }, 5000);
+}
 
 function countdown() {
     
     const countdownInterval = setInterval(() => {
+        
+
+
         if (time === 0) {
           
             countdownelement.textContent = 'vis';
             clearInterval(randomImg);
             clearInterval(countdownInterval);
-            console.log(playerChoise)
+            // console.log(playerChoise) 
 
             
-            const p2choise = Math.floor(Math.random() * 3)
+
             setTimeout(() => {    
                 randomImageTool(playerChoise-1, p1Img)
                 randomImageTool(p2choise, p2Img)
-                console.log(p2choise)
-                console.log(p2Img.src)
-                console.log(p2choise)
+                // console.log(p2choise, "i timeout")
+                // console.log(p2Img.src)
 
+                // console.log(playerChoise, p2choise, "playerChoise, p2Choise") 
                 winCheker(playerChoise, p2choise)
+
             }, 110);
    
 
         } else if (time === 1) {
 
+
             if (playerChoise == 0) {
                 countdownelement.textContent = time;
                 time--;
+                p2choise = Math.floor(Math.random() * 3)
+                // console.log(p2choise, "test pcchoise") 
             } else {
                 countdownelement.textContent = time;
                 time--;
+                p2choise = p2Autowin(playerChoise)
+                // console.log(p2choise, "early")
             }
+
 
         } else {
           countdownelement.textContent = time;
@@ -227,4 +261,25 @@ function randomImageTool(num, user) {
     
 }
 
+function p2Autowin(p1choise) {
+    let winNum
 
+    switch (p1choise) {
+        case 1:
+            // player chose stone
+            winNum = 2
+            break;
+        case 2:
+            // player chose saks
+            winNum = 0
+            break;
+
+        case 3: 
+            // player chose pappir
+            winNum = 1
+            break;
+    }
+    // console.log(winNum, "test") 
+    return winNum;
+
+}
