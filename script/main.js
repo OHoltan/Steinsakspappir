@@ -54,7 +54,7 @@ startButton.addEventListener('click', () => {
 function gamestarter() {
     startGameElements.forEach((Element) => Element.classList.toggle("hidden"))
     userButtton.forEach((Element) => Element.classList.toggle("hidden"))
-
+    countdownelement.textContent = 3;
     countdown()
 }
 
